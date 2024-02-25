@@ -80,6 +80,19 @@ const useStore = create((set) => ({
       }
     }),
   clearCart: () => set({ cart: [], totalPrice: 0 }),
+  updateStock: (productId, quantity) => {
+    set((state) => {
+      const updatedProducts = state.products.map((product) => {
+        if (product.id === productId) {
+          // Reducir el stock según la cantidad comprada
+          return { ...product, stock: product.stock - quantity };
+        }
+        return product;
+      });
+      console.log('el quantity', { products: updatedProducts });
+      return { products: updatedProducts };
+    });
+  },
 }));
 
 export default useStore;

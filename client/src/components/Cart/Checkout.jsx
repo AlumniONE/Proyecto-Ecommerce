@@ -8,7 +8,7 @@ import {
 import useStore from '../../utils/store';
 
 const Checkout = () => {
-  const { totalPrice, cart } = useStore();
+  const { totalPrice, cart, updateStock } = useStore();
 
   const [calculatedTotal, setCalculatedTotal] = useState(0);
 
@@ -21,6 +21,25 @@ const Checkout = () => {
       setCalculatedTotal(totalWithTax);
     }
   }, [totalPrice, cart]);
+
+  function contarRepetidos(arreglo, producto) {
+    return arreglo.filter((item) => item.id === producto.id).length;
+  }
+
+  const handleStock = () => {
+    let elCarrito = cart;
+    elCarrito.forEach((product) => {
+      const cantidadRepetida = contarRepetidos(elCarrito, product);
+      if (cantidadRepetida !== 0) {
+        console.log(
+          `El producto '${product.model}' se repite ${cantidadRepetida} veces.`
+        );
+        updateStock(product.id, cantidadRepetida);
+      }
+      elCarrito = elCarrito.filter((p) => p.id !== product.id);
+    });
+    // clearCart();
+  };
 
   return (
     <div className="w-full md:w-72">
@@ -59,7 +78,10 @@ const Checkout = () => {
               ${calculatedTotal.toFixed(2)}
             </span>
           </div>
-          <button className="bg-[#00B517] rounded-lg text-white text-lg py-2 flex justify-center">
+          <button
+            onClick={handleStock}
+            className="bg-[#00B517] rounded-lg text-white text-lg py-2 flex justify-center"
+          >
             Checkout
           </button>
           <div className="justify-center gap-2 mt-2 hidden md:flex">
