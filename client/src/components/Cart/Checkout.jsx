@@ -8,7 +8,7 @@ import {
 import useStore from '../../utils/store';
 
 const Checkout = () => {
-  const { totalPrice, cart, updateStock } = useStore();
+  const { totalPrice, cart, updateStock, clearCart } = useStore();
 
   const [calculatedTotal, setCalculatedTotal] = useState(0);
 
@@ -31,14 +31,14 @@ const Checkout = () => {
     elCarrito.forEach((product) => {
       const cantidadRepetida = contarRepetidos(elCarrito, product);
       if (cantidadRepetida !== 0) {
-        console.log(
-          `El producto '${product.model}' se repite ${cantidadRepetida} veces.`
-        );
-        updateStock(product.id, cantidadRepetida);
+        // console.log(
+        //   `El producto '${product.model}' se repite ${cantidadRepetida} veces.`
+        // );
+        updateStock(product.id, cantidadRepetida, product);
       }
       elCarrito = elCarrito.filter((p) => p.id !== product.id);
     });
-    // clearCart();
+    clearCart();
   };
 
   return (

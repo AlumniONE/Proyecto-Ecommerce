@@ -1,3 +1,4 @@
+/* eslint-disable space-before-function-paren */
 import { create } from 'zustand';
 import axios from 'axios'; // Importar axios
 
@@ -80,18 +81,46 @@ const useStore = create((set) => ({
       }
     }),
   clearCart: () => set({ cart: [], totalPrice: 0 }),
-  updateStock: (productId, quantity) => {
-    set((state) => {
-      const updatedProducts = state.products.map((product) => {
-        if (product.id === productId) {
-          // Reducir el stock según la cantidad comprada
-          return { ...product, stock: product.stock - quantity };
+  updateStock: async (productId, quantity, producto) => {
+    try {
+      const response = await axios.put(
+        `http://ns1.dataindev.com:8080/ecommerce/cellphones/${productId}`,
+        // Datos actualizados del producto
+        {
+          brand: producto.brand,
+          model: producto.model,
+          price: producto.price,
+          internalStorage: producto.internalStorage,
+          ramMemory: producto.ramMemory,
+          operatingSystem: producto.operatingSystem,
+          screenSize: producto.screenSize,
+          screenResolution: producto.screenResolution,
+          mainCamera: producto.mainCamera,
+          frontCamera: producto.frontCamera,
+          battery: producto.battery,
+          connectivity: producto.connectivity,
+          color: producto.color,
+          stock: producto.stock - quantity,
+          launchDate: producto.launchDate,
+          image: producto.image,
         }
-        return product;
-      });
-      console.log('el quantity', { products: updatedProducts });
-      return { products: updatedProducts };
-    });
+      );
+      console.log('Stock actualizado:', response.data);
+      // Actualizando el estado local
+      // set((state) => {
+      //   const updatedProducts = state.products.map((product) => {
+      //     if (product.id === productId) {
+      //       // Reducir el stock según la cantidad comprada
+      //       return { ...product, stock: product.stock - quantity };
+      //     }
+      //     return product;
+      //   });
+      //   console.log('el quantity', { products: updatedProducts });
+      //   return { products: updatedProducts };
+      // });
+    } catch (error) {
+      console.error('Error al actualizar el stock:', error);
+    }
   },
 }));
 
