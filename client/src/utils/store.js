@@ -9,8 +9,6 @@ const useStore = create((set) => ({
   totalPages: 1,
   cart: [],
   totalPrice: 0,
-
-  // eslint-disable-next-line space-before-function-paren
   fetchProducts: async (page = 0) => {
     try {
       const response = await axios.get(
@@ -31,7 +29,7 @@ const useStore = create((set) => ({
     }
   },
   productId: [],
-  // eslint-disable-next-line space-before-function-paren
+
   getProductById: async (id) => {
     try {
       const response = await axios.get(
